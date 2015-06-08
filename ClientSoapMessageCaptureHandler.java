@@ -33,8 +33,7 @@ public class ClientSoapMessageCaptureHandler implements SOAPHandler<SOAPMessageC
     return rawResponse;
   }
 
-  @Override
-  public boolean handleMessage(SOAPMessageContext context) {
+  public void processMessageContext(SOAPMessageContext context) {
     Boolean isRequest = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
     SOAPMessage soapMsg = context.getMessage();
     ByteArrayOutputStream rawOutput = new ByteArrayOutputStream();
@@ -53,12 +52,17 @@ public class ClientSoapMessageCaptureHandler implements SOAPHandler<SOAPMessageC
       System.err.println(e);
       e.printStackTrace();
     }
+  }
 
+  @Override
+  public boolean handleMessage(SOAPMessageContext context) {
+    processMessageContext(context);
     return true;
   }
 
   @Override
   public boolean handleFault(SOAPMessageContext context) {
+    processMessageContext(context);
     return true;
   }
 
